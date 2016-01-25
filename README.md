@@ -1,1 +1,1 @@
-# CompMethodsCourse
+#Information and scripts for the 2016 Comparative Methods Course
