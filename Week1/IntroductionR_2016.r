@@ -77,6 +77,7 @@ xvec[8]
 
 getwd() # Where is the working directory?
 setwd("~/Desktop/BITW-Workshop")  #set for a Mac OS
+setwd("/Users/Home/Dropbox/Amherst/Courses/CompMethods/CompMethodsCourse/Week1")
 
 # Easier to set working directory if you use RStudio
 # Point & click in RStudio: Tools --> Global Options
