@@ -1,1 +1,2 @@
-#Information and scripts for the 2016 Comparative Methods Course
+#Comparative Methods Course
+Information and R scripts for the 2016 class
