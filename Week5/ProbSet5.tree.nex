@@ -1,0 +1,9 @@
+#NEXUS
+BEGIN TREES;
+
+	Tree 1 = (((Gorilla_gorilla_gorilla:1.0,Pan_troglodytes:1.0):1.0,Pongo_pygmaeus:2.0):2.0,(Cercopithecus_aethiops:1.0,Cercopithecus_ascanius:1.0):3.0):1;
+
+	TREE 2 = (((Gorilla_gorilla_gorilla:9.35,Pan_troglodytes:9.35):7.05,Pongo_pygmaeus:16.5):14.51,(Cercopithecus_aethiops:4.8,Cercopithecus_ascanius:4.8):26.16):1;
+
+
+END;
