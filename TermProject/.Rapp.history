@@ -1,0 +1,614 @@
+c <- ggplot(Data, aes(factor(Department)))#
+c + geom_bar() + theme_bw()
+d <- ggplot(Data, aes(factor(Degree..M.S..PhD..etc.)))#
+d + geom_bar() + theme_bw()
+c <- ggplot(Data, aes(factor(Department)))#
+c + geom_bar() + theme_bw()
+d <- ggplot(Data, aes(factor(Degree..M.S..PhD..etc.)))#
+d + geom_bar() + theme_bw()
+require(XML)<br>require(maptools)<br>require(jpeg)<br><br>input = "panthera-uncia"<br>h <- htmlParse(paste("http://api.iucnredlist.org/go/",<br>               input, sep = ""))<br><br>distr1 <- xpathSApply(h, '//ul[@class="countries"]', xmlValue)<br>distr2 <- unlist(strsplit(distr1, "\n"))<br>distr2[distr2 == "Russian Federation"] <- "Russia"<br><br>pop <-xpathSApply(h, '//div[@id="population"]/text()[preceding-sibling::br]', xmlValue)<br>status <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)<br><br>data(wrld_simpl)<br><br>pdf("IUCN_map.pdf", width = 10, height = 10, pointsize = 20)<br>par(mar = c(3, 3, 1, 1))<br>plot(wrld_simpl, col = "grey98", xlim=c(-170, 170), axes = T)<br>plot(wrld_simpl[wrld_simpl$NAME %in% distr2,], col = "grey75", add = T)<br>text(0, 150, gsub("-", " ", toupper(input)), font = 3)<br>text(0, 130, paste("--Status: ", status, "--", sep = ""))<br>text(0, -98, "--Population--", cex = 0.5, font = 2) <br>text(0, -140, paste(strwrap(pop, width = 30), collapse = "\n"), cex
+= 0.4)<br><br># download image:<br>myjpg <- paste(tempdir(), "/", input, ".jpg", sep = "")<br>download.file("http://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Uncia_uncia.jpg/399px-Uncia_uncia.jpg",<br>              myjpg, mode = "wb")<br><br># read and plot image:<br>img <- readJPEG(myjpg)<br>w <- dim(img)[2]/7<br>h <- dim(img)[1]/7<br><br># print img to plot region:<br>rasterImage(img, 115, 95, 115+w, 95+h)<br><br>graphics.off()<br>
+require(xml)
+install.packages("xml")
+install.packages("XML")
+require(XML)#
+require(maptools)#
+require(jpeg)#
+input = "panthera-uncia"#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/",#
+               input, sep = ""))#
+distr1 <- xpathSApply(h, '//ul[@class="countries"]', xmlValue)#
+distr2 <- unlist(strsplit(distr1, "\n"))#
+distr2[distr2 == "Russian Federation"] <- "Russia"#
+pop <-xpathSApply(h, '//div[@id="population"]/text()[preceding-sibling::br]', xmlValue)#
+status <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+data(wrld_simpl)#
+pdf("IUCN_map.pdf", width = 10, height = 10, pointsize = 20)#
+par(mar = c(3, 3, 1, 1))#
+plot(wrld_simpl, col = "grey98", xlim=c(-170, 170), axes = T)#
+plot(wrld_simpl[wrld_simpl$NAME %in% distr2,], col = "grey75", add = T)#
+text(0, 150, gsub("-", " ", toupper(input)), font = 3)#
+text(0, 130, paste("--Status: ", status, "--", sep = ""))#
+text(0, -98, "--Population--", cex = 0.5, font = 2) #
+text(0, -140, paste(strwrap(pop, width = 30), collapse = "\n"), cex = 0.4)#
+# download image:#
+myjpg <- paste(tempdir(), "/", input, ".jpg", sep = "")#
+download.file("http://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Uncia_uncia.jpg/399px-Uncia_uncia.jpg",#
+              myjpg, mode = "wb")#
+# read and plot image:#
+img <- readJPEG(myjpg)#
+w <- dim(img)[2]/7#
+h <- dim(img)[1]/7#
+# print img to plot region:#
+rasterImage(img, 115, 95, 115+w, 95+h)#
+graphics.off()
+require(XML)#
+require(maptools)#
+require(jpeg)#
+input = "panthera-uncia"#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/",#
+               input, sep = ""))#
+distr1 <- xpathSApply(h, '//ul[@class="countries"]', xmlValue)#
+distr2 <- unlist(strsplit(distr1, "\n"))#
+distr2[distr2 == "Russian Federation"] <- "Russia"#
+pop <-xpathSApply(h, '//div[@id="population"]/text()[preceding-sibling::br]', xmlValue)#
+status <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+data(wrld_simpl)#
+pdf("IUCN_map.pdf", width = 10, height = 10, pointsize = 20)#
+par(mar = c(3, 3, 1, 1))#
+plot(wrld_simpl, col = "grey98", xlim=c(-170, 170), axes = T)#
+plot(wrld_simpl[wrld_simpl$NAME %in% distr2,], col = "grey75", add = T)#
+text(0, 150, gsub("-", " ", toupper(input)), font = 3)#
+text(0, 130, paste("--Status: ", status, "--", sep = ""))#
+text(0, -98, "--Population--", cex = 0.5, font = 2) #
+text(0, -140, paste(strwrap(pop, width = 30), collapse = "\n"), cex = 0.4)#
+# download image:#
+graphics.off()
+getwd()
+require(XML)
+require(maptools)
+require(jpeg)
+input = "panthera-uncia"
+input
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+h
+htmlParse("http://people.umass.edu/ajsmi1/index.html")
+distr1 <- xpathSApply(h, '//ul[@class="countries"]', xmlValue)
+distr1
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+h
+status <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)
+status
+distr1
+distr2
+distr2 <- unlist(strsplit(distr1, "\n"))
+distr2
+distr2[distr2 == "Russian Federation"] <- "Russia"
+distr2
+pop <-xpathSApply(h, '//div[@id="population"]/text()[preceding-sibling::br]', xmlValue)
+pop
+Taxa<-c("Acinonyx-jubatus",#
+"Ailuropoda-melanoleuca",#
+"Ailurus-fulgens",#
+"Aonyx-capensis",#
+"Aonyx-cinerea",#
+"Arctictis-binturong",#
+"Arctocephalus-australis",#
+"Arctocephalus-forsteri",#
+"Arctocephalus-galapagoensis",#
+"Arctocephalus-gazella",#
+"Arctocephalus-philippii",#
+"Arctocephalus-pusillus",#
+"Arctocephalus-townsendi",#
+"Arctocephalus-tropicalis",#
+"Arctogalidia-trivirgata",#
+"Arctonyx-collaris",#
+"Artibeus-jamaicensis",#
+"Atelocynus-microtis",#
+"Atilax-paludinosus")
+input = Taxa[1]
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+status <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)
+status
+distr1 <- xpathSApply(h, '//ul[@class="countries"]', xmlValue)
+distr1
+pop <-xpathSApply(h, '//div[@id="population"]/text()[preceding-sibling::br]', xmlValue)
+pop
+Taxa<-c("Acinonyx-jubatus",#
+"Ailuropoda-melanoleuca",#
+"Ailurus-fulgens",#
+"Aonyx-capensis",#
+"Aonyx-cinerea",#
+"Arctictis-binturong",#
+"Arctocephalus-australis",#
+"Arctocephalus-forsteri",#
+"Arctocephalus-galapagoensis",#
+"Arctocephalus-gazella",#
+"Arctocephalus-philippii",#
+"Arctocephalus-pusillus",#
+"Arctocephalus-townsendi",#
+"Arctocephalus-tropicalis",#
+"Arctogalidia-trivirgata",#
+"Arctonyx-collaris",#
+"Artibeus-jamaicensis",#
+"Atelocynus-microtis",#
+"Atilax-paludinosus")#
+#
+status<-NULL#
+for(i in 1:19){#
+input = Taxa[1]#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))#
+#
+status[i] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+ }
+status
+Taxa<-c("Acinonyx-jubatus",#
+"Ailuropoda-melanoleuca",#
+"Ailurus-fulgens",#
+"Aonyx-capensis",#
+"Aonyx-cinerea",#
+"Arctictis-binturong",#
+"Arctocephalus-australis",#
+"Arctocephalus-forsteri",#
+"Arctocephalus-galapagoensis",#
+"Arctocephalus-gazella",#
+"Arctocephalus-philippii",#
+"Arctocephalus-pusillus",#
+"Arctocephalus-townsendi",#
+"Arctocephalus-tropicalis",#
+"Arctogalidia-trivirgata",#
+"Arctonyx-collaris",#
+"Artibeus-jamaicensis",#
+"Atelocynus-microtis",#
+"Atilax-paludinosus",#
+"Panthera uncia")#
+#
+status<-NULL#
+for(i in 1:20){#
+input = Taxa[1]#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))#
+#
+status[i] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+ }#
+#
+status
+Taxa<-c("Acinonyx-jubatus",#
+"Ailuropoda-melanoleuca",#
+"Ailurus-fulgens",#
+"Aonyx-capensis",#
+"Aonyx-cinerea",#
+"Arctictis-binturong",#
+"Arctocephalus-australis",#
+"Arctocephalus-forsteri",#
+"Arctocephalus-galapagoensis",#
+"Arctocephalus-gazella",#
+"Arctocephalus-philippii",#
+"Arctocephalus-pusillus",#
+"Arctocephalus-townsendi",#
+"Arctocephalus-tropicalis",#
+"Arctogalidia-trivirgata",#
+"Arctonyx-collaris",#
+"Artibeus-jamaicensis",#
+"Atelocynus-microtis",#
+"Atilax-paludinosus",#
+"Panthera uncia")#
+#
+status<-NULL#
+for(i in 1:20){#
+input = Taxa[i]#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))#
+#
+status[i] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+ }#
+#
+status
+status<-NULL
+input = Taxa[1]
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+status[1] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)
+status
+input = Taxa[20]
+input
+Taxa<-c("Acinonyx-jubatus",#
+"Ailuropoda-melanoleuca",#
+"Ailurus-fulgens",#
+"Aonyx-capensis",#
+"Aonyx-cinerea",#
+"Arctictis-binturong",#
+"Arctocephalus-australis",#
+"Arctocephalus-forsteri",#
+"Arctocephalus-galapagoensis",#
+"Arctocephalus-gazella",#
+"Arctocephalus-philippii",#
+"Arctocephalus-pusillus",#
+"Arctocephalus-townsendi",#
+"Arctocephalus-tropicalis",#
+"Arctogalidia-trivirgata",#
+"Arctonyx-collaris",#
+"Artibeus-jamaicensis",#
+"Atelocynus-microtis",#
+"Atilax-paludinosus",#
+"Panthera-uncia")#
+#
+status<-NULL#
+for(i in 1:20){#
+input = Taxa[i]#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))#
+#
+status[i] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+ }#
+#
+status
+require(ape)
+Tr<-read.nexus("~/Downloads/S15307.nex")
+plot(Tr)
+Tr<-read.nexus("~/Desktop/Test.nex")
+Tr<-read.nexus("~/Desktop/Test.nex")
+plot(laddrize(Tr))
+plot(ladderize(Tr))
+plot(ladderize(Tr), cex=0.2)
+axisPhylo()
+str(Tr)
+Taxa<-Tr$tip.label
+status<-NULL#
+for(i in 1:306){#
+input = Taxa[i]#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))#
+#
+status[i] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+ }#
+#
+status
+Taxa
+Taxa<-Tr$tip.label
+input = Taxa[1]
+input
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+h
+Tes<-"Addax-nasomaculatus"
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", Tes, sep = ""))
+h
+Tes<-"Addax_nasomaculatus"
+gsub("_", "-", Tes)
+Taxa<-Tr$tip.label#
+#
+status<-NULL#
+for(i in 1:306){#
+input = gsub("_", "-", Taxa[i])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))#
+#
+status[i] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+ }#
+#
+status
+Taxa<-Tr$tip.label
+Taxa[28]
+input = gsub("_", "-", Taxa[28])
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+Taxa<-Taxa[-28]
+status<-NULL#
+for(i in 1:305){#
+input = gsub("_", "-", Taxa[i])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))#
+#
+status[i] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+ }#
+#
+status
+Taxa<-Tr$tip.label#
+#
+Taxa<-Taxa[c(-28, -39)]#
+#
+status<-NULL#
+for(i in 1:304){#
+input = gsub("_", "-", Taxa[i])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))#
+#
+status[i] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+ }#
+#
+status
+Taxa<-Tr$tip.label
+Taxa<-Taxa[c(-28)]
+status<-NULL#
+for(i in 1:304){#
+input = gsub("_", "-", Taxa[i])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))#
+#
+status[i] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+ }#
+#
+status
+Taxa<-Tr$tip.label
+Taxa<-Taxa[c(-28, -40)]#
+#
+status<-NULL#
+for(i in 1:304){#
+input = gsub("_", "-", Taxa[i])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))#
+#
+status[i] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+ }#
+#
+status
+Taxa<-Tr$tip.label
+Taxa<-Tr$tip.label
+input = gsub("_", "-", Taxa[40])
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+input = gsub("_", "-", Taxa[39])
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+input = gsub("_", "-", Taxa[38])
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+input = gsub("_", "-", Taxa[41])
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+Taxa<-Tr$tip.label
+Taxa<-Taxa[c(-28, -41)]
+status<-NULL#
+for(i in 1:304){#
+input = gsub("_", "-", Taxa[i])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))#
+#
+status[i] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+ }#
+#
+status
+input = gsub("_", "-", Taxa[98])
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+input = gsub("_", "-", Taxa[97])
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+input = gsub("_", "-", Taxa[99])
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+Taxa<-Tr$tip.label#
+#
+Taxa<-Taxa[c(-28, -41, -98)]#
+#
+status<-NULL#
+for(i in 1:304){#
+input = gsub("_", "-", Taxa[i])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))#
+#
+status[i] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+ }#
+#
+status
+Taxa<-Tr$tip.label
+input = gsub("_", "-", Taxa[98])
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+input = gsub("_", "-", Taxa[97])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+input = gsub("_", "-", Taxa[96])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+input = gsub("_", "-", Taxa[95])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+input = gsub("_", "-", Taxa[99])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+input = gsub("_", "-", Taxa[99])
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+input = gsub("_", "-", Taxa[100])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+Taxa<-Tr$tip.label#
+#
+Taxa<-Taxa[c(-28, -41, -100)]#
+#
+status<-NULL#
+for(i in 1:304){#
+input = gsub("_", "-", Taxa[i])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))#
+#
+status[i] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+ }#
+#
+status
+Taxa<-Tr$tip.label
+input = gsub("_", "-", Taxa[116])
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+input = gsub("_", "-", Taxa[115])
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+input = gsub("_", "-", Taxa[117])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+Taxa<-Tr$tip.label#
+#
+Taxa<-Taxa[c(-28, -41, -100, -117)]#
+#
+status<-NULL#
+for(i in 1:304){#
+input = gsub("_", "-", Taxa[i])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))#
+#
+status[i] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+ }#
+#
+status
+Taxa<-Tr$tip.label
+input = gsub("_", "-", Taxa[160])
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+input = gsub("_", "-", Taxa[161])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+Taxa<-Tr$tip.label
+input = gsub("_", "-", Taxa[161])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+Taxa<-Tr$tip.label#
+#
+Taxa<-Taxa[c(-28, -41, -100, -117, -161)]#
+#
+status<-NULL#
+for(i in 1:304){#
+input = gsub("_", "-", Taxa[i])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))#
+#
+status[i] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+ }#
+#
+status
+Taxa<-Tr$tip.label
+input = gsub("_", "-", Taxa[223])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+input = gsub("_", "-", Taxa[224])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+Taxa<-Tr$tip.label
+Taxa
+Taxa<-Tr$tip.label#
+#
+Taxa<-Taxa[c(-28, -41, -100, -117, -161, -224)]#
+#
+status<-NULL#
+for(i in 1:299){#
+input = gsub("_", "-", Taxa[i])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))#
+#
+status[i] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+ }#
+#
+status
+Taxa<-Tr$tip.label
+Taxon<-Taxa[c(28, 41, 100, 117, 161, 224)]
+Taxon
+status=="DD"
+sum(as.numeric(status=="DD"))
+Taxa<-Tr$tip.label
+Taxa[status=="DD"]
+New<-c(Taxa[status=="DD"], Taxon)
+New
+?drop.tip
+Taxa<-Tr$tip.label
+NewTaxa<-drop.tip(Tr, New)
+plot(ladderize(NewTaxa), cex=0.5)
+status<-NULL#
+for(i in 1:299){#
+input = gsub("_", "-", NewTaxa[i])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))#
+#
+status[i] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+ }#
+#
+status
+NewTaxa
+Tx<-NewTaxa$tip.label
+Tx<-NewTaxa$tip.label#
+#
+status<-NULL#
+for(i in 1:299){#
+input = gsub("_", "-", Tx[i])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))#
+#
+status[i] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+ }#
+#
+status
+Tx[245]
+input = gsub("_", "-", Tx[245])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+Taxa<-Tr$tip.label
+Taxa<-Taxa[c(-28, -41, -100, -117, -161, -224)]
+status<-NULL#
+for(i in 1:299){#
+input = gsub("_", "-", Taxa[i])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))#
+#
+status[i] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+ }#
+#
+status
+Taxa<-Tr$tip.label
+input = gsub("_", "-", Taxa[294])
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+input = gsub("_", "-", Taxa[293])
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+input = gsub("_", "-", Taxa[295])
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))
+Taxa<-Tr$tip.label
+Taxa<-Taxa[c(-28, -41, -100, -117, -161, -224, -295)]
+status<-NULL#
+for(i in 1:299){#
+input = gsub("_", "-", Taxa[i])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))#
+#
+status[i] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+ }#
+#
+status
+Taxon<-Taxa[c(28, 41, 100, 117, 161, 224, 295)]
+Taxon
+Taxa<-Tr$tip.label
+Taxon<-Taxa[c(28, 41, 100, 117, 161, 224, 295)]
+Taxon
+Taxa<-Taxa[c(-28, -41, -100, -117, -161, -224, -295)]
+Poor<-Taxa[status=="DD"]
+New<-c(Poor, Taxon)
+New
+NewTaxa<-drop.tip(Tr, New)
+Tx<-NewTaxa$tip.label
+Tx
+OldSatatus<-Status
+OldSatatus<-status
+status<-NULL#
+for(i in 1:250){#
+input = gsub("_", "-", Tx[i])#
+h <- htmlParse(paste("http://api.iucnredlist.org/go/", input, sep = ""))#
+#
+status[i] <- xpathSApply(h, '//div[@id="red_list_category_code"]', xmlValue)#
+ }#
+#
+status
+getwd()
+write.tree(NewTaxa, "UngulateTree.tre")
+DF<-cbind(Tx, status)
+DF
+write.csv(DF, "UngulateFile.csv", quote=F)
+setwd("/Users/Home/Dropbox/Amherst/Courses/CompMethods/CompMethodsCourse/TermProject")
+source("Ungulate_SOURCE.R")
+Files<-MakeFiles()
+Files<-MakeFiles()
+Tree<-Files[[1]]#
+Data<-Files[[2]]
+head(Data)
+levels(Data[,1])
+table(Data[,1])
+Dat <- ordered(Data, levels = c("EX", "EW", "CR", "EN", "VU", "NT", "LC"))
+Dat
+Data[,1] <- ordered(Data, levels = c("EX", "EW", "CR", "EN", "VU", "NT", "LC"))
+str(Data)
+head(Data)
+Data<-Files[[2]]
+?relevel
+Data[,1] <- ordered(Data[,1], levels = c("EX", "EW", "CR", "EN", "VU", "NT", "LC"))
+head(Data)
+str(Data)
+as.numeric(Data[,1])
+AncestralMap
+Trait<-as.numeric(Data[,1])
+names(Trait)<-rownames(Data)
+contMap
+?contMap
+contMap(Tree, Trait, fsize=1)
+Trait
+Tree
+length(Trait)
+contMap(Tree, Trait)
+class(Trait)
+head(Data)
+AncestralMap(Tree, Data, "CentDataPrune")
+contMap
+AncestralMap(Tree, Data, "CentDataPrune")
+Trait
+length(Trait)
+Tree
+Tree&tip.label
+Tree&tip.labels
+Tree&tiplabels
+Tree&tiplabel
+str(Tree)
+Tree&tip.label
+Tree$tip.label
+AncestralMap
+DispDatas<-Disparity(Tree, Data, Data[,1])
+DispData<-Disparity(Tree, Data, Data[,1])
+Trees<-di2multi(Tree, tol=1e-01)
+AncestralMap(Trees, Data, "CentDataPrune")
+contMap(Trees,Trait,res=200)
+contMap(Trees,Trait,res=300)
+contMap(Trees,Trait,res=300, fsize=3)
+contMap(Trees,Trait,res=300, fsize=1)
+contMap(Trees,Trait,res=300, fsize=0.5)
+contMap(Trees,Trait,res=300, fsize=0.2)
+Poor<-Taxa[status=="DD"]
