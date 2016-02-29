@@ -357,3 +357,13 @@ profiles.plot(samples20[c("q01", "q10")], col.line=terrain.colors(3), las=1, leg
 
 #The rate of evolution from non-robust to robust is similar to robust to non-robust
   #Therefore we would expect the plots to be on top of each other.
+
+#A bit of ancestral state recon. here
+fitER <- rerootingMethod(tree_10, robustmandible, model = "ER")
+print(fitER)
+
+plotTree(tree_10, setEnv = TRUE, offset = 0.5)
+nodelabels(node = as.numeric(rownames(fitER$marginal.anc)), pie = fitER$marginal.anc, piecol = c("blue", "red", "yellow"), cex = 0.6)
+tiplabels(pie = to.matrix(robustmandible, sort(unique(robustmandible))), piecol = c("blue", "red", "yellow"), cex = 0.3)
+
+#Doesn't seem to get that the bottom-most clade is more likely to be all red (including the nodes).
