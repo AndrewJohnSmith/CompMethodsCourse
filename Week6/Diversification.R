@@ -11,6 +11,8 @@ library(apTreeshape)
 # Lineage through time plot
 #--------------------------------
 
+plot(ladderize(primate_tree05), cex=0.6); axisPhylo()
+
 #lets plot a species through time plot. we will use a plotting command from ape
 ltt.plot(primate_tree05)
 
@@ -37,8 +39,7 @@ hist(branching.times(primate_tree05))
 # We can start with a pure-birth tree (where d = 0)
 
 simulated.tree1<-sim.bdtree(b=0.2, d=0, t=10)
-
-plot(simulated.tree1)
+plot(ladderize(simulated.tree1))
 
 # its interesting to note the variation in tree shape and # species:
 # we will plot 9 trees on one panel using the par command to prepare the graphic object
@@ -59,6 +60,7 @@ plot(simulated.tree3)
 }
 
 # note that not all taxa get to the current time- these are extinct taxa, that can be removed with
+par(mfrow=c(1,1))
 
 simulated.tree4=drop.extinct(simulated.tree3)
 
