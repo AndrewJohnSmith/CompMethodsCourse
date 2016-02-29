@@ -1,3 +1,5 @@
+setwd("~/Dropbox/Amherst/Courses/CompMethods/CompMethodsCourse/Week6")
+
 # Modeling Trait Evolution
 
 library(ape)
@@ -5,64 +7,60 @@ library(ape)
 library (phytools)
 
 primate_traits <- read.csv("primate_traits.csv")
+primate_tree05 <- read.tree("primate_tree05.txt")
 
-primate_tree05=read.tree("primate_tree05.txt")
-
-female_mass=primate_traits$female_mass
-
-names(female_mass)=primate_traits$species
+female_mass <- primate_traits$female_mass
+names(female_mass) <- primate_traits$species
 
 
 #----------------------------------------------------
 # Model trait evolution via Brownian motion
 #----------------------------------------------------
 
+library(geiger)
+
 modelBM<-fitContinuous(primate_tree05, female_mass, model = "BM")
 
 modelBM
 
-GEIGER-fitted comparative model of continuous data
- fitted ‘BM’ model parameters:
-	sigsq = 8062695.905460
-	z0 = 8922.262375
+#GEIGER-fitted comparative model of continuous data
+# fitted ?BM? model parameters:
+#	sigsq = 8062695.905460
+#	z0 = 8922.262375
 
- model summary:
-	log-likelihood = -336.438483
-	AIC = 676.876966
-	AICc = 677.305538
-	free parameters = 2
+# model summary:
+#	log-likelihood = -336.438483
+#	AIC = 676.876966
+#	AICc = 677.305538
+#	free parameters = 2
 
-Convergence diagnostics:
-	optimization iterations = 100
-	failed iterations = 0
-	frequency of best fit = 1.00
+#Convergence diagnostics:
+#	optimization iterations = 100
+#	failed iterations = 0
+#	frequency of best fit = 1.00
 
- object summary:
-	'lik' -- likelihood function
-	'bnd' -- bounds for likelihood search
-	'res' -- optimization iteration summary
-	'opt' -- maximum likelihood parameter estimates
-> modelBM$opt
-$sigsq
-[1] 8062696
+# object summary:
+#	'lik' -- likelihood function
+#	'bnd' -- bounds for likelihood search
+#	'res' -- optimization iteration summary
+#	'opt' -- maximum likelihood parameter estimates
 
-$z0
-[1] 8922.262
+modelBM$opt
 
-$lnL
-[1] -336.4385
-
-$method
-[1] "Brent"
-
-$k
-[1] 2
-
-$aic
-[1] 676.877
-
-$aicc
-[1] 677.3055
+#$sigsq
+#[1] 8062696
+#$z0
+#[1] 8922.262
+#$lnL
+#[1] -336.4385
+#$method
+#[1] "Brent"
+#$k
+#[1] 2
+#$aic
+#[1] 676.877
+#$aicc
+#[1] 677.3055
 
 #---------------------------------------------------------------
 # Model trait evolution via Ornstein-Uhlenbeck model
@@ -72,13 +70,13 @@ modelOU<-fitContinuous(primate_tree05, female_mass, model = "OU")
 
 modelOU
 
-GEIGER-fitted comparative model of continuous data
- fitted ‘OU’ model parameters:
-	alpha = 0.017382
-	sigsq = 11200378.611272
-	z0 = 9224.008374
+#GEIGER-fitted comparative model of continuous data
+# fitted ?OU? model parameters:
+#	alpha = 0.017382
+#	sigsq = 11200378.611272
+#	z0 = 9224.008374
 
- model summary:
+# model summary:
 	log-likelihood = -335.942007
 	AIC = 677.884013
 	AICc = 678.772902
@@ -100,7 +98,9 @@ lik   1    bm         function
 bnd   2    data.frame list
 res 400    -none-     numeric
 opt   8    -none-     list
-> modelOU$opt
+
+modelOU$opt
+
 $alpha
 [1] 0.01738177
 
@@ -135,7 +135,7 @@ modelEB<-fitContinuous(primate_tree05, female_mass, model = "EB")
 modelEB
 
 GEIGER-fitted comparative model of continuous data
- fitted ‘EB’ model parameters:
+ fitted ?EB? model parameters:
 	a = -0.000001
 	sigsq = 8063208.908645
 	z0 = 8922.254795
@@ -165,14 +165,37 @@ Convergence diagnostics:
 
 # What is the most likely model of trait evolution?
 #**********************************************************
-  
+
+library(qpcR)
+
+modelLBM<-fitContinuous(primate_tree05, log(female_mass), model = "BM")
+modelLOU<-fitContinuous(primate_tree05, log(female_mass), model = "OU")
+modelLEB<-fitContinuous(primate_tree05, log(female_mass), model = "EB")
+
+model.primate<-matrix(,3,4,dimnames = list(c("Brownian Motion", "Early Burst", "Ornstein-Uhlenbeck"),c("log likelihood", "AICc", "Delta AICc", "AICc Weights")))
+
+model.primate[,1]<-c(modelLBM$opt$lnL, modelLEB$opt$lnL, modelLOU$opt$lnL)
+model.primate[,2]<-c(modelLBM$opt$aicc, modelLEB$opt$aicc, modelLOU$opt$aicc)
+
+aic.all.primate<-as.matrix(model.primate[,2])
+
+scor.wts.primate<-akaike.weights(aic.all.primate)
+
+model.primate[,3]<-scor.wts.primate$deltaAIC
+model.primate[,4]<-scor.wts.primate$weights
+model.primate
+
+#                   log likelihood    AICc  Delta AICc   AICc Weights
+#Brownian Motion         -32.04379 68.51615   0.000000    0.6310529
+#Early Burst             -32.04324 70.97536   2.459217    0.1845243
+#Ornstein-Uhlenbeck      -32.04379 70.97646   2.460317    0.1844228
 
 #---------------------------------------------------------
 # Rate of Discrete Trait Evolution using the diversitree package
 # note: code based on the tutorial accompanying diversitree
 #---------------------------------------------------------
 
-install(diversitree)
+install.packages("diversitree")
 
 library(diversitree)
 
@@ -181,7 +204,7 @@ library(diversitree)
 
 phy <- tree.bd(c(.1, .03), max.taxa=50)
 
-plot(phy)
+plot(ladderize(phy))
 
 # Simulate a discrete binary trait on the tree
 # The trait starts in state 0; x0=0
@@ -226,13 +249,15 @@ anova(fit.mk2, mk1=fit.mk1)
 full  2 -29.912 63.825                    
 mk1   1 -32.848 67.695 5.8703     0.0154 *
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Signif. codes:  0 ?***? 0.001 ?**? 0.01 ?*? 0.05 ?.? 0.1 ? ? 1
 
 # These results suggest that there is a significant difference between an equal rates of trait transition vs. unequal rates
 
 # Why are the degrees of freedom different for the two models (full vs. mk1)?
+  #Two transition rates vs. 1?
 
 #**** What does it mean if the transition rate is higher in one direction than the other?? *******************
+  #More likely to observed transtions in one direction (i.e., gain of function rather than loos of function).
 
 #----------------------------------------------------
 # Sample the likelihood distribution using a Bayesian approach (MCMC)
@@ -249,7 +274,7 @@ prior.exp <- make.prior.exponential(10) # sets the prior distribution
 
 # Diversitree also allows for a uniform prior; this is an non-informative prior (i.e. you don't have much prior information)
 
-samples <- mcmc(lik.mk2, c(.1, .1), nsteps=5000, prior=prior.exp, w=.1, print.every=0)
+samples <- mcmc(lik.mk2, c(.1, .1), nsteps=10000, prior=prior.exp, w=.1, print.every=1000)
 # lik.mk2 is the likelihood function from above
 # c (.1, .1) is the starting point for the Markov chain
 # nsteps is the number of steps or the number of times the parameter space is searched by the chain
@@ -258,7 +283,7 @@ samples <- mcmc(lik.mk2, c(.1, .1), nsteps=5000, prior=prior.exp, w=.1, print.ev
 # w is the tuning parameter;  related to the "acceptance rate" for each step, which you usually want to be 20-40%
 # print.every = records the parameters every X number of steps
 
-samples <- subset(samples, i > 500)
+samples <- subset(samples, i > 1000)
 # From the 5000 steps, only consider steps >500
 # The first 500 steps are considered the "burnin" phase
 # During the burnin phase, the chain will often search areas of parameter space that are not useful
@@ -267,8 +292,9 @@ samples <- subset(samples, i > 500)
 mean(samples$q01 > samples$q10)
 
 # The frequency of samples where the q01 parameter is greater than the q10 parameter
+  #0.1146667 - just over 10%
 
-par(mfrow=c(1,1)
+par(mfrow=c(1,1))
 
 col <- c("#004165", "#eaab00")
 # sets the colors for parameters q01 and q10
@@ -290,19 +316,19 @@ abline(v=c(.1, .2), col=col)
 
 primate_binary <- read.csv("primate_binary.csv") # this dataset quantifies the mandible of primates as robust (1) or not robust (0)
 
-robustmandible=primate_binary$robustmandible   # extract the variable to a new object
+robustmandible <- primate_binary$robustmandible   # extract the variable to a new object
 
-names(robustmandible)=primate_binary$species  # assign species names to each row
+names(robustmandible) <- primate_binary$species  # assign species names to each row
 
-tree_10=read.tree("primate_tree05.txt") # read the phylogeny
+tree_10 <- read.tree("primate_tree05.txt") # read the phylogeny
 
 lik.mk20 <- make.mk2(tree_10, robustmandible)
 
 fit.mk20 <- find.mle(lik.mk20, c(.1, .1), method="subplex")
 
-coef(fit.mk20)
-       q01        q10 
-0.03168182 0.03240891 
+#coef(fit.mk20)
+#       q01        q10 
+#0.03168182 0.03240891 
 
 lik.mk10 <- constrain(lik.mk20, q10 ~ q01)
 
@@ -320,23 +346,14 @@ mk10  1 -18.584 39.167 0.0019786     0.9645
 
 prior.exp <- make.prior.exponential(10)
 
-samples20 <- mcmc(lik.mk20, c(.1, .1), nsteps=5000, prior=prior.exp, w=.1, print.every=0)
+samples20 <- mcmc(lik.mk20, c(.1, .1), nsteps=10000, prior=prior.exp, w=.1, print.every=1000)
 
-samples20 <- subset(samples20, i > 500)
+samples20 <- subset(samples20, i > 1000)
 
 mean(samples20$q01 > samples20$q10)
 
 profiles.plot(samples20[c("q01", "q10")], col.line=terrain.colors(3), las=1, legend.pos="topright")
 
 
-
-
-
-
-
-
-
-
-
-
-
+#The rate of evolution from non-robust to robust is similar to robust to non-robust
+  #Therefore we would expect the plots to be on top of each other.
