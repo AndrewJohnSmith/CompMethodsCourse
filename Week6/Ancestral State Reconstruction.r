@@ -68,19 +68,20 @@ $CI95
 61  7.553788  8.290680
 
 
-plot(primate_tree05)
+plot(ladderize(primate_tree05), cex=0.6); axisPhylo()
 
-nodelabels(pch = 21, cex=(MLreconstruction2$ace)*0.33)  # 0.33 is a multiplier (i.e. scales) of the reconstructed value to better display on the tree. You can modify this value.
+nodelabels(pch = 21, cex=(MLreconstruction2$ace*0.33))  # 0.33 is a multiplier (i.e. scales) of the reconstructed value to better display on the tree. You can modify this value.
  
 write.csv(MLreconstruction2$ace, "MLreconstruction.csv")
-
 write.csv(MLreconstruction2$CI95, "MLreconstruction_CI95.csv")
 
 # What is the reconstructed value for the last common ancestor of gorillas and chimpanzees?
 mrca(primate_tree05)["Gorilla_gorilla", "Pan_troglodytes"]
+  #48
 
 # What is the reconstructed value for the last common ancestor of ring tailed lemurs and ruffed lemurs?
 mrca(primate_tree05)["Lemur_catta", "Varecia_variegata"]
+  #60
 
 #----------------------------------------------------------
 # Using phytools
@@ -141,7 +142,7 @@ $CI95
 
 # Option 2
 
-anc_BM=anc.ML(primate_tree05, female_mass, model = "BM")
+anc_BM <- anc.ML(primate_tree05, female_mass, model = "BM")
 
 anc_BM
 
@@ -180,14 +181,19 @@ $model
 attr(,"class")
 [1] "anc.ML"
 
+
+anc_BM <- anc.ML(primate_tree05, log(female_mass), model = "BM")
+
+
 #------------------------------------------------------------------
 # Reconstructing states using maximum likelihood and a OU model
 #------------------------------------------------------------------
 
 # Revell warns that the OU modeol "has not be thoroughly tested & some bugs were reported for an earlier version"
 
-> anc_OU=anc.ML(primate_tree05, female_mass, CI = TRUE, model = "OU")
-> anc_OU
+anc_OU <- anc.ML(primate_tree05, female_mass, CI = TRUE, model = "OU")
+anc_OU
+
 $sig2
 [1] 4236332
 
@@ -225,5 +231,6 @@ $model
 attr(,"class")
 [1] "anc.ML"
  
-
-
+#A few things from phytools
+phenogram(primate_tree05, log(female_mass), spread.labels = TRUE)
+fancyTree(primate_tree05, type = "phenogram95", x = log(female_mass))
