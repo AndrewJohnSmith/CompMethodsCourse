@@ -126,7 +126,11 @@ primate_traits_m2 <- primate_traits_m[,-1]
 # There is a zero in the dataset so we have to add a constant while log transforming
 primate_traits_m2 <- log((primate_traits_m2)+0.01)
 
+#Uses lambda
 primate_traits_phyl_pca <- phyl.pca(primate_tree05, primate_traits_m2, method="lambda", mode="corr")
+
+#Can also use BM
+primate_traits_phyl_pca <- phyl.pca(primate_tree05, primate_traits_m2, method="BM", mode="corr")
 
 phylomorphospace(primate_tree05, primate_traits_phyl_pca$S, label="horizontal")
 
@@ -152,15 +156,3 @@ primate_traits_phyl_pca$lambda
 # Use two of the above methods on your data (or a subet of your data)
 # Email the results to me
 #***************************************
-
-
-
-
-
-
-
-
-
-
-
-
