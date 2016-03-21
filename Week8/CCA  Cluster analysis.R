@@ -145,13 +145,13 @@ primate_traits_cluster <- primate_traits_dfa[,3:6]
 
 # Create a Euclidian distance matrix
 
-primate_traits_dist=dist(primate_traits_cluster)
+primate_traits_dist <- dist(primate_traits_cluster)
 
 # View the distance matrix
 primate_traits_dist
 
 # Run the cluster function, which creates a hierarchical cluster; it uses the complete linkage method by default; also known as farthest neighbour clustering
-cluster01=hclust(primate_traits_dist)
+cluster01 <- hclust(primate_traits_dist)
 
 # View the dendrogram
 plot(cluster01)
@@ -164,7 +164,7 @@ plot(cluster01)
 
 library(cluster)
 
-cluster_upgma01=agnes(primate_traits_dist, method="average")
+cluster_upgma01 <- agnes(primate_traits_dist, method="average")
 # This package can also use a raw data matrix and calculate various distance metrics within the function; it can also use different methods to contruct the cluster analysis; refer to the package manual for details
 
 plot(cluster_upgma01)
@@ -186,21 +186,31 @@ library(recluster)
 
 africa_primates2 <- read.csv("africa_primates2.csv")
 
-rownames(africa_primates2)=africa_primates2$Site
+rownames(africa_primates2) <- africa_primates2$Site
 
-africa_primates3=africa_primates2[,-1]
+africa_primates3 <- africa_primates2[,-1]
 
 # This function creates a series of trees by resampling the order of sites in the dissimilarity matrix.
 # Then, it computes a consensus among them. The resulting tree is unaffected by original row order.
 # tr = The number of trees to be used for the consensus;  p = proportion for a clade to be represented in the consensus tree;
 # dist = type of distance metric to use; method = the one specified is UPGMA; phylo = only needs to be specified if conducing a phylogenetic betadiversity analysis
 
-africa_primates2_cluster = recluster.cons(africa_primates3, phylo = NULL, tr = 100, p = 0.5, dist = "sorensen", method = "average", blenghts=TRUE, select=FALSE)
+africa_primates2_cluster <- recluster.cons(africa_primates3, phylo = NULL, tr = 100, p = 0.5, dist = "sorensen", method = "average", blenghts=TRUE, select=FALSE)
 
 # Bootstraps the consensus tree; boot = number of replicates; level = use 1 to keep the same number of sites in the replicates
 
-africa_primates2_boot01 = recluster.boot(africa_primates2_cluster$cons, africa_primates3, phylo = NULL, tr = 100, p = 0.5, dist = "sorensen", method = "average", boot = 100, level = 1)
+africa_primates2_boot01 <- recluster.boot(africa_primates2_cluster$cons, africa_primates3, phylo = NULL, tr = 100, p = 0.5, dist = "sorensen", method = "average", boot = 100, level = 1)
 
 # Plot the bootstrapped tree
 
 recluster.plot(africa_primates2_cluster$cons,africa_primates2_boot01,direction="downwards")
+
+##PCA on the environmental data
+AfEnvironPCA<-prcomp(africa_environ[,2:6])
+summary(AfEnvironPCA)
+AfEnvScore<-AfEnvironPCA$x
+
+cca.model2 <- cca(africa_primates ~ PC1 + PC2, data=as.data.frame(AfEnvScore))
+
+row.names(cca.model2$CCA$wa)<-as.character(africa_environ$Site) #Add in site names
+plot(cca.model2)
