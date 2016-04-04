@@ -1,5 +1,7 @@
 # DFA and MANOVA
 
+setwd("~/Dropbox/Amherst/Courses/CompMethods/CompMethodsCourse/Week9")
+
 #-----------------------------------------------
 # Discriminant function analysis
 #-----------------------------------------------
