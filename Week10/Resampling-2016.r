@@ -80,9 +80,7 @@ coverage.probability
 # Resampling methods: bootstrap, randomization tests
 #------------------------------------------------------------------------------
 
-library(Design)
 library(boot) 
-library(bootstrap)
 
 # Global variables
 set.seed(111007)
