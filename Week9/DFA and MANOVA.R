@@ -22,6 +22,8 @@ sapply(primate_traits_dfa[3:6],mean)  # the sapply function can be used to apply
 
 sapply(primate_traits_dfa[3:6],sd)
 
+#This appears almost identical to the apply(DATA[,1:n], 2, FUN) argument
+
 # Run the DFA model
 
 dfa_model01 = lda(clade ~ abs_female_ECV + female_mass + groupsize + per_leaves, data = primate_traits_dfa)
@@ -62,6 +64,7 @@ Proportion of trace:       # Variance explained by each DFA axis
 # You can also produce the discriminant function scores for each sample
 
 predict(dfa_model01)$x
+#Any reason why it gives only 2 axes from four variables?
 
 # Output
                                  LD1         LD2
@@ -99,23 +102,26 @@ Varecia_variegata         2.14029987 -0.62173223
 
 # You can assess the accuracy of the prediction by examining the percent correct for each category. This time, re-run the model using the CV=TRUE argument, which generates jacknifed (i.e., leave one out) predictions.
 
-dfa_model01 = lda(clade ~ abs_female_ECV + female_mass + groupsize + per_leaves, data = primate_traits_dfa, CV=TRUE)
+dfa_model02 = lda(clade ~ abs_female_ECV + female_mass + groupsize + per_leaves, data = primate_traits_dfa, CV=TRUE)
 
-jacknifed_pred <- table(primate_traits_dfa$clade, dfa_model01$class)
+jacknifed_pred <- table(primate_traits_dfa$clade, dfa_model02$class)
 
 diag(prop.table(jacknifed_pred, 1))
 
 # Percent correctly predicted for all samples
+#cata platyr  strep 
+#0.75   0.30   0.80 
+  #Some of these are pretty shitty.
 
 sum(diag(prop.table(jacknifed_pred)))
 
 # Now examine how well each species was classifed
-
-dfa_model01$posterior
+  #Many don't have that awesome percentages (i.e., <50% certainty)
+dfa_model02$posterior
 
 # You can write these results to a csv file
 
-write.csv(dfa_model01$posterior, "posterior_prob.csv")
+write.csv(dfa_model02$posterior, "posterior_prob.csv")
 
 #******************************
 # Email me an example of a poorly classifed catarrhine, platyrrhine, and strepsirrhine species
@@ -123,18 +129,26 @@ write.csv(dfa_model01$posterior, "posterior_prob.csv")
 
 # Classify new or unknown samples according to the DFA model
 
-# Read in a data file of unclassifed taxa
+# Read in a data file of unclassifed taxa (e.g., a fossil taxon)
 primate_traits_dfa_unk <- read.csv("primate_traits_dfa_unk.csv")
 
-dfa_model01_class <- predict(dfa_model01, primate_traits_dfa_unk)
+#Change to CV = FALSE tp give an 'lda' object
+dfa_model03 = lda(clade ~ abs_female_ECV + female_mass + groupsize + per_leaves, data = primate_traits_dfa, CV=F)
+
+dfa_model03_class <- predict(dfa_model03, primate_traits_dfa_unk)
 
 # Obtain the classification results
+  #Rows indicate the probability that the 3 'fossil' taxa fit into one of the primate groupings
 
-dfa_model01_class$posterior
+dfa_model03_class$posterior
 
 # Obtain the DFA scores for the unknown samples
 
-dfa_model01_class$x
+dfa_model03_class$x
+
+#Plot them
+plot(dfa_model01)
+points(dfa_model03_class$x, pch=20, col="red")
 
 #------------------------------------------------------
 # Run a MANOVA to obtain the p value of the DFA analysis (which should be identical to a DFA except the idependent and dependent variables are switched)
@@ -154,7 +168,7 @@ manova_model01 <- manova(dep_var_matrix01_m ~ primate_traits_dfa$clade)
 # Obtain the model's p value based on Wilks' lambda
 
 summary(manova_model01, test="Wilks")
-
+#Crazy significant - the four variables are different depending on the clade.
 
 ##############################################################
 
