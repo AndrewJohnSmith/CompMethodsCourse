@@ -32,6 +32,7 @@ data_leaves2_dist = dist(data_leaves2)
 mantel01 = mantel(data_leaves2_dist, data_fruit2_dist, method="pearson", permutations=9999)
 
 mantel01
+#There is a correlation between the two leaves data matricies.
 
 #-----------------------------------------------------------
 # Partial Mantel test
@@ -55,6 +56,7 @@ data_mass_dist = dist(data_mass2)
 partial_mantel01 = mantel.partial(data_leaves2_dist, data_fruit2_dist, data_mass_dist, method="pearson", permutations=9999)
 
 partial_mantel01
+#Partial mantel is subtracting one matrix against another.
 
 ##############################################
 # Run a Mantel test examining the relationship between community species composition and environmental factors
@@ -250,6 +252,8 @@ spdata <- joinCountryData2Map(samples
 #Plot map of sampling effort for each country
 #-------------------------------------------------------------------------
 
+COLS<-c
+
 mapCountryData(spdata, colourPalette = c("red", "orange", "yellow"), nameColumnToPlot="sampocc", borderCol = "black", mapTitle = "Sampling effort per country")
 
 #This has the warning message:
@@ -299,7 +303,7 @@ library(rgeos)
 #You need ALL of them in your working directory to make this work
 #-------------------------------------------------------------------------
 
-maps<-readShapeSpatial("MAMMTERR")#This is SLOW; it took about 3 mins to run on my fast computer
+maps<-readShapeSpatial("/Users/Home/Downloads/TERRESTRIAL_MAMMALS/TERRESTRIAL_MAMMALS.shp")#This is SLOW; it took about 3 mins to run on my fast computer
 
 proj4string(maps) <-CRS("+proj=longlat +datum=WGS84")
 #ensure the projection is correct***This is really important! check your map projection before use!
@@ -309,13 +313,17 @@ maps@data$BINOMIAL<-gsub("Mico argentatus","Callithrix argentata", maps@data$BIN
 
 #You can plot range maps either individually or on the world map:
 
-plot(maps[which(maps@data$BINOMIAL == "Pan troglodytes"),])
+plot(maps[which(maps@data$BINOMIAL == "Condylura cristata"),])
+#Didn't seem to work?
 
 #or:
 
 data(wrld_simpl)
 plot(wrld_simpl)
-plot(maps[which(maps@data$BINOMIAL == "Pan troglodytes"),], add = TRUE, col = "green")
+plot(maps[which(maps@data$BINOMIAL == "Condylura cristata"),], add = TRUE, col = "green")
+
+
+
 
 #-------------------------------------------------------------------------
 #To look at overlap/intersections between two species:
